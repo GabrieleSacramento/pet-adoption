@@ -1,0 +1,30 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "pet-adoption-1e171",
+                    "appId": "1:815862751291:android:78dd4608bae52f9f05bc1e",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "ios": {
+                "default": {
+                    "projectId": "pet-adoption-1e171",
+                    "appId": "1:815862751291:ios:69ba3c7af9b4457f05bc1e",
+                    "uploadDebugSymbols": false,
+                    "fileOutput": "ios/Runner/GoogleService-Info.plist"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "pet-adoption-1e171",
+                    "configurations": {
+                        "android": "1:815862751291:android:78dd4608bae52f9f05bc1e",
+                        "ios": "1:815862751291:ios:69ba3c7af9b4457f05bc1e"
+                    }
+                }
+            }
+        }
+    }
+}
