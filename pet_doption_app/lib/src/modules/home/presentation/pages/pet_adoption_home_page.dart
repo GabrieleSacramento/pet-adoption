@@ -9,52 +9,54 @@ class PetAdoptionHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const RegisterThePetToDonateWidget(),
-              Padding(
-                padding: EdgeInsets.only(top: 32.h, bottom: 16.h),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Encontre um amigo',
-                    style: TextStyle(
-                      fontSize: 20.h,
-                      color: const Color.fromRGBO(86, 83, 83, 1),
+    return SafeArea(
+      child: Scaffold(
+        appBar: const HomePageAppBar(),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const RegisterThePetToDonateWidget(),
+                Padding(
+                  padding: EdgeInsets.only(top: 32.h, bottom: 16.h),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Encontre um amigo',
+                      style: TextStyle(
+                        fontSize: 20.h,
+                        color: const Color.fromRGBO(86, 83, 83, 1),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              GridView.builder(
-                itemCount: 4,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.7,
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16.w,
-                  crossAxisSpacing: 16.h,
+                GridView.builder(
+                  itemCount: 4,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 0.7,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16.w,
+                    crossAxisSpacing: 16.h,
+                  ),
+                  itemBuilder: (context, index) {
+                    return const ChooseAPetToAdoptWidget();
+                  },
                 ),
-                itemBuilder: (context, index) {
-                  return const ChooseAPetToAdoptWidget();
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 24.h,
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 24.h,
+                  ),
+                  child: CustomButton(
+                    textButton: 'Ver mais',
+                    onPressed: () {},
+                    textButtonSize: 16.h,
+                  ),
                 ),
-                child: CustomButton(
-                  textButton: 'Ver mais',
-                  onPressed: () {},
-                  textButtonSize: 16.h,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -216,8 +218,8 @@ class RegisterThePetToDonateWidget extends StatelessWidget {
   }
 }
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({
+class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const HomePageAppBar({
     super.key,
   });
 

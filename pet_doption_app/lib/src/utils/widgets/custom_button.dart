@@ -32,7 +32,7 @@ class CustomButton extends StatelessWidget {
           buttonColor ?? const Color.fromRGBO(241, 152, 69, 1),
         ),
         fixedSize: MaterialStateProperty.all<Size>(
-          isLarge == true ? Size(double.maxFinite, 36.h) : Size(150.w, 40.h),
+          isLarge == true ? Size(double.maxFinite, 40.h) : Size(150.w, 40.h),
         ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(

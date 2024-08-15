@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pet_doption_app/generated/app_localizations.dart';
-<<<<<<< Updated upstream
-=======
-import 'package:pet_doption_app/src/modules/login/presentation/pages/login_method_selection_page.dart';
->>>>>>> Stashed changes
+import 'package:pet_doption_app/src/modules/Auth/presentation/pages/login_method_selection_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -30,7 +27,7 @@ class App extends StatelessWidget {
               AppLocalizations.of(context).appTitle,
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
-          home: Container()),
+          home: const LoginMethodSelectionPage()),
     );
   }
 }

@@ -1,1 +1,1 @@
-export '../modules/login/presentation/pages/login_method_selection_page.dart';
+export '../modules/Auth/presentation/pages/login_method_selection_page.dart';

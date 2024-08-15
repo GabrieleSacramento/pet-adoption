@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pet_doption_app/src/modules/home/presentation/pages/pet_adoption_home_page.dart';
-import 'package:pet_doption_app/src/modules/login/presentation/pages/login_page.dart';
-import 'package:pet_doption_app/src/modules/signup/presentation/pages/signup_page.dart';
+import 'package:pet_doption_app/src/modules/Auth/presentation/pages/login_page.dart';
+import 'package:pet_doption_app/src/modules/Auth/presentation/pages/signup_page.dart';
 import 'package:pet_doption_app/src/utils/widgets/custom_button.dart';
 
 class LoginMethodSelectionPage extends StatelessWidget {
