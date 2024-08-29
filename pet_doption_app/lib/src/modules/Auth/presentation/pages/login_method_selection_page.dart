@@ -13,39 +13,55 @@ class LoginMethodSelectionPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Lottie.asset(
-                  'assets/animations/choose_login_method_animation.json'),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  Lottie.asset(
+                      'assets/animations/choose_login_method_animation.json'),
+                  Padding(
+                    padding: EdgeInsets.only(top: 64.h),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            'Encontre seu novo amigo aqui',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20.h,
+                              fontWeight: FontWeight.bold,
+                              color: const Color.fromRGBO(241, 152, 69, 1),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 62.w, vertical: 24.h),
+                          child: Text(
+                            'Torne a sua vida mais feliz com um novo melhor amigo pet.',
+                            style: TextStyle(
+                              fontSize: 14.h,
+                              color: const Color.fromRGBO(86, 83, 83, 1),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              fillOverscroll: false,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 32.h),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'Encontre seu novo amigo aqui',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20.h,
-                          fontWeight: FontWeight.bold,
-                          color: const Color.fromRGBO(241, 152, 69, 1),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 62, vertical: 24),
-                      child: Text(
-                        'Torne a sua vida mais feliz com um novo melhor amigo pet.',
-                        style: TextStyle(
-                          fontSize: 14.h,
-                          color: const Color.fromRGBO(86, 83, 83, 1),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
                     CustomButton(
                       textButton: 'Entrar',
                       onPressed: () {
@@ -86,8 +102,8 @@ class LoginMethodSelectionPage extends StatelessWidget {
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

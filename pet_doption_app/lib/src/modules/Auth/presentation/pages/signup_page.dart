@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
@@ -8,6 +9,7 @@ import 'package:pet_doption_app/src/modules/home/presentation/pages/pet_adoption
 import 'package:pet_doption_app/src/utils/widgets/custom_app_bar.dart';
 import 'package:pet_doption_app/src/utils/widgets/custom_button.dart';
 import 'package:pet_doption_app/src/utils/widgets/custom_form.dart';
+import 'package:pet_doption_app/src/utils/widgets/loading_button.dart';
 
 import 'package:string_validator/string_validator.dart' as validator;
 
@@ -50,154 +52,174 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
-        appBarTitle: 'Criar conta',
-        isBackButtonVisible: true,
-      ),
-      body: BlocProvider(
-        create: (context) => signupCubit,
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 16.w,
-                right: 32.w,
-                top: 24.h,
-                bottom: 32.h,
-              ),
-              child: Column(
-                children: [
-                  CustomForm(
-                    obscurePassword: false,
-                    hintText: 'Nome',
-                    controller: nameController,
-                    label: 'Nome',
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Este campo precisa ser preenchido';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const SizedBox(
-                    height: 9,
-                  ),
-                  CustomForm(
-                    obscurePassword: false,
-                    hintText: 'Sobrenome',
-                    controller: lastNameController,
-                    label: 'Sobrenome',
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Este campo precisa ser preenchido';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const SizedBox(
-                    height: 9,
-                  ),
-                  CustomForm(
-                    obscurePassword: false,
-                    hintText: 'Email',
-                    controller: emailController,
-                    label: 'Email',
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Este campo precisa ser preenchido';
-                      }
-                      if (!validator.isEmail(text)) {
-                        return 'Email inválido';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const SizedBox(
-                    height: 9,
-                  ),
-                  CustomForm(
-                    obscurePassword: isPasswordVisible,
-                    hintText: 'Senha',
-                    controller: passwordController,
-                    label: 'Senha',
-                    suffixIcon: GestureDetector(
-                      onTap: () => setState(
-                          () => isPasswordVisible = !isPasswordVisible),
-                      child: Icon(
-                        isPasswordVisible
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const CustomAppBar(
+          appBarTitle: 'Criar conta',
+          isBackButtonVisible: true,
+        ),
+        body: BlocProvider(
+            create: (context) => signupCubit,
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 24.w,
+                        right: 32.w,
+                        top: 24.h,
+                        bottom: 32.h,
+                      ),
+                      child: Column(
+                        children: [
+                          CustomForm(
+                            obscurePassword: false,
+                            hintText: 'Nome',
+                            controller: nameController,
+                            label: 'Nome',
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Este campo precisa ser preenchido';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          CustomForm(
+                            obscurePassword: false,
+                            hintText: 'Sobrenome',
+                            controller: lastNameController,
+                            label: 'Sobrenome',
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Este campo precisa ser preenchido';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          CustomForm(
+                            obscurePassword: false,
+                            hintText: 'Email',
+                            controller: emailController,
+                            label: 'Email',
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Este campo precisa ser preenchido';
+                              }
+                              if (!validator.isEmail(text)) {
+                                return 'Email inválido';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          CustomForm(
+                            obscurePassword: isPasswordVisible,
+                            hintText: 'Senha',
+                            controller: passwordController,
+                            label: 'Senha',
+                            suffixIcon: GestureDetector(
+                              onTap: () => setState(
+                                  () => isPasswordVisible = !isPasswordVisible),
+                              child: Icon(
+                                isPasswordVisible
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                              ),
+                            ),
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Este campo precisa ser preenchido';
+                              }
+                              if (text.length < 8) {
+                                return 'A senha deve conter no mínimo 8 caracteres';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 32,
+                          ),
+                        ],
                       ),
                     ),
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Este campo precisa ser preenchido';
-                      }
-                      if (text.length < 8) {
-                        return 'A senha deve conter no mínimo 8 caracteres';
-                      }
-                      return null;
-                    },
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  BlocConsumer<UserAuthenticationCubit,
-                      UserAuthenticationState>(
-                    listener: (context, state) {
-                      if (state is UserAuthenticationError) {
-                        showActionSnackBar(context);
-                      }
-                      if (state is UserAuthenticationSuccess) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PetAdoptionHomePage(),
-                          ),
-                        );
-                        clearForm();
-                      }
-                    },
-                    builder: (context, state) {
-                      if (state is UserAuthenticationLoading) {
-                        return const CircularProgressIndicator();
-                      }
-                      return CustomButton(
-                        textButton: 'Criar conta',
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            signupCubit.signUp(
-                              UserAuthenticationEntity(
-                                email: emailController.text,
-                                password: passwordController.text,
+                ),
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  fillOverscroll: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BlocConsumer<UserAuthenticationCubit,
+                          UserAuthenticationState>(
+                        listener: (context, state) {
+                          if (state is UserAuthenticationError) {
+                            showActionSnackBar(context);
+                          }
+                          if (state is UserAuthenticationSuccess) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const PetAdoptionHomePage(),
+                              ),
+                            );
+                            clearForm();
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is UserAuthenticationLoading) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                left: 24.w,
+                                right: 24.w,
+                                bottom: 32.h,
+                              ),
+                              child: const LoadingButton(
+                                isLarge: true,
                               ),
                             );
                           }
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: 24.w,
+                              right: 24.w,
+                              bottom: 32.h,
+                            ),
+                            child: CustomButton(
+                              textButton: 'Criar conta',
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  signupCubit.signUp(
+                                    UserAuthenticationEntity(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                    ),
+                                  );
+                                }
+                              },
+                              isLarge: true,
+                            ),
+                          );
                         },
-                        isLarge: true,
-                      );
-                    },
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
+                ),
+              ],
+            )),
       ),
     );
   }
