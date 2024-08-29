@@ -11,9 +11,10 @@ class PetAdoptionHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: const HomePageAppBar(),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -226,6 +227,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
       titleSpacing: 0,
       toolbarHeight: 80.h,
@@ -242,7 +244,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             const CircleAvatar(
-              backgroundImage: AssetImage('assets/images/picture.jpg'),
+              backgroundImage: AssetImage('assets/images/mari.JPG'),
               backgroundColor: Colors.white,
             ),
           ],

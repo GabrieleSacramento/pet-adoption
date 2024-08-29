@@ -18,13 +18,13 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-final _formKey = GlobalKey<FormState>();
-final emailController = TextEditingController();
-final passwordController = TextEditingController();
-bool isPasswordVisible = false;
-final _loginCubit = GetIt.I.get<UserAuthenticationCubit>();
-
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool isPasswordVisible = false;
+  final _loginCubit = GetIt.I.get<UserAuthenticationCubit>();
+
   @override
   void dispose() {
     super.dispose();
@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       create: (context) => _loginCubit,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           appBar: const CustomAppBar(
             appBarTitle: 'Login',
             isBackButtonVisible: true,
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                           label: 'Email',
                           validator: (text) {
                             if (text == null || text.isEmpty) {
-                              return 'Este campo é obrigatório';
+                              return 'Este campo precisa ser preenchido';
                             }
                             if (!validator.isEmail(text)) {
                               return 'Email inválido';
@@ -101,9 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                               if (text == null || text.isEmpty) {
                                 return 'Este campo precisa ser preenchido';
                               }
-                              if (text.length < 8) {
-                                return 'A senha deve conter no mínimo 8 caracteres';
-                              }
+
                               return null;
                             },
                           ),
@@ -117,6 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (state is UserAuthenticationError) {
                         showActionSnackBar(context);
                       }
+
                       if (state is UserAuthenticationSuccess) {
                         Navigator.push(
                           context,
@@ -160,9 +160,13 @@ class _LoginPageState extends State<LoginPage> {
     const snackBar = SnackBar(
       content: Text(
         'Não foi possivel realizar o cadastro',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
       ),
-      backgroundColor: Colors.redAccent,
+      backgroundColor: Color.fromRGBO(241, 152, 69, 1),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

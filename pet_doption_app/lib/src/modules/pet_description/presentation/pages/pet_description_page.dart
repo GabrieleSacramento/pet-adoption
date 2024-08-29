@@ -12,6 +12,7 @@ class PetDescriptionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: const CustomAppBar(
           appBarTitle: 'Sobre o pet',
           isBackButtonVisible: true,

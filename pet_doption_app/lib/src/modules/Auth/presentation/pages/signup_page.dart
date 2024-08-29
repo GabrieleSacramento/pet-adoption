@@ -18,19 +18,19 @@ class SignupPage extends StatefulWidget {
   State<SignupPage> createState() => _SignupPageState();
 }
 
-bool isPasswordVisible = false;
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-final nameController = TextEditingController();
-
-final lastNameController = TextEditingController();
-
-final emailController = TextEditingController();
-
-final passwordController = TextEditingController();
-
-final signupCubit = GetIt.I.get<UserAuthenticationCubit>();
-
 class _SignupPageState extends State<SignupPage> {
+  bool isPasswordVisible = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+
+  final lastNameController = TextEditingController();
+
+  final emailController = TextEditingController();
+
+  final passwordController = TextEditingController();
+
+  final signupCubit = GetIt.I.get<UserAuthenticationCubit>();
+
   @override
   void dispose() {
     super.dispose();
@@ -51,6 +51,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: const CustomAppBar(
         appBarTitle: 'Criar conta',
         isBackButtonVisible: true,

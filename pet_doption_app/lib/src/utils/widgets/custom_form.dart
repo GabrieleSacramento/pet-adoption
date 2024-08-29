@@ -14,7 +14,7 @@ class CustomForm extends StatelessWidget {
   bool? obscurePassword;
 
   CustomForm({
-    Key? key,
+    super.key,
     this.controller,
     this.onChanged,
     this.validator,
@@ -22,7 +22,7 @@ class CustomForm extends StatelessWidget {
     this.suffixIcon,
     this.obscurePassword,
     required this.label,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,6 @@ class CustomForm extends StatelessWidget {
         TextFormField(
           obscureText: obscurePassword ?? false,
           controller: controller,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: validator,
           onChanged: onChanged,
           decoration: InputDecoration(
@@ -98,6 +97,9 @@ class CustomForm extends StatelessWidget {
               fontWeight: FontWeight.w400,
               color: Colors.black,
             ),
+          ),
+          style: const TextStyle(
+            color: const Color.fromRGBO(37, 41, 84, 1),
           ),
         ),
       ],

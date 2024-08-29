@@ -25,6 +25,7 @@ class _PetFormState extends State<PetForm> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: const CustomAppBar(
           appBarTitle: 'Cadastre um pet',
           isBackButtonVisible: true,
