@@ -54,6 +54,7 @@ class CustomForm extends StatelessWidget {
           ),
         ),
         TextFormField(
+          keyboardType: TextInputType.text,
           obscureText: obscurePassword ?? false,
           controller: controller,
           validator: validator,

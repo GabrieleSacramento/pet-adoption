@@ -1,62 +1,120 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pet_doption_app/src/modules/pet_description/presentation/pages/pet_description_page.dart';
-import 'package:pet_doption_app/src/modules/register_pet/presentation/pages/pet_form.dart';
+import 'package:pet_doption_app/src/modules/register_pet/presentation/cubit/get_pet_info_cubit.dart';
+import 'package:pet_doption_app/src/modules/register_pet/presentation/pages/pet_form_page.dart';
 import 'package:pet_doption_app/src/utils/widgets/custom_button.dart';
 
-class PetAdoptionHomePage extends StatelessWidget {
+class PetAdoptionHomePage extends StatefulWidget {
   const PetAdoptionHomePage({super.key});
 
   @override
+  State<PetAdoptionHomePage> createState() => _PetAdoptionHomePageState();
+}
+
+final GetPetInfoCubit _getPetInfoCubit = GetIt.I.get<GetPetInfoCubit>();
+
+final ScrollController scrollController = ScrollController();
+
+class _PetAdoptionHomePageState extends State<PetAdoptionHomePage> {
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: const HomePageAppBar(),
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const RegisterThePetToDonateWidget(),
-                Padding(
-                  padding: EdgeInsets.only(top: 32.h, bottom: 16.h),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Encontre um amigo',
-                      style: TextStyle(
-                        fontSize: 20.h,
-                        color: const Color.fromRGBO(86, 83, 83, 1),
+    return BlocProvider(
+      create: (context) => _getPetInfoCubit..fetchPetInformation(),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: const HomePageAppBar(),
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const RegisterThePetToDonateWidget(),
+                  Padding(
+                    padding: EdgeInsets.only(top: 32.h, bottom: 16.h),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Encontre um amigo',
+                        style: TextStyle(
+                          fontSize: 20.h,
+                          color: const Color.fromRGBO(86, 83, 83, 1),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                GridView.builder(
-                  itemCount: 4,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.7,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 16.w,
-                    crossAxisSpacing: 16.h,
+                  BlocBuilder<GetPetInfoCubit, GetPetInfoState>(
+                    builder: (context, state) {
+                      if (state is GetPetInfoLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (state is GetPetInfoSuccess) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 32.h),
+                          child: GridView.builder(
+                            controller: scrollController,
+                            itemCount: state.petInfoEntity.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 0.7,
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 16.w,
+                              crossAxisSpacing: 16.h,
+                            ),
+                            itemBuilder: (context, index) {
+                              return ChooseAPetToAdoptWidget(
+                                petName: state.petInfoEntity[index].name,
+                                petSex: state.petInfoEntity[index].sex,
+                                petLocalization:
+                                    state.petInfoEntity[index].localization,
+                                petImageUrl:
+                                    state.petInfoEntity[index].imageUrl,
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => PetDescriptionPage(
+                                        petImageUrl:
+                                            state.petInfoEntity[index].imageUrl,
+                                        petSex: state.petInfoEntity[index].sex,
+                                        petName:
+                                            state.petInfoEntity[index].name,
+                                        petLocalization: state
+                                            .petInfoEntity[index].localization,
+                                        petAge: state.petInfoEntity[index].age!,
+                                        petRace:
+                                            state.petInfoEntity[index].race!,
+                                        petWeight:
+                                            state.petInfoEntity[index].weight!,
+                                        petDescription: state
+                                            .petInfoEntity[index].description!,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      }
+                      if (state is GetPetInfoError) {
+                        return const Center(
+                          child: Text('Erro ao buscar informações'),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
                   ),
-                  itemBuilder: (context, index) {
-                    return const ChooseAPetToAdoptWidget();
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 24.h,
-                  ),
-                  child: CustomButton(
-                    textButton: 'Ver mais',
-                    onPressed: () {},
-                    textButtonSize: 16.h,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -66,17 +124,25 @@ class PetAdoptionHomePage extends StatelessWidget {
 }
 
 class ChooseAPetToAdoptWidget extends StatelessWidget {
+  final String petName;
+  final String petSex;
+  final String petLocalization;
+  final String petImageUrl;
+  final Function()? onPressed;
+
   const ChooseAPetToAdoptWidget({
     super.key,
+    required this.petName,
+    required this.petSex,
+    required this.petLocalization,
+    required this.petImageUrl,
+    this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PetDescriptionPage()));
-      },
+      onTap: onPressed,
       child: Container(
         height: 191.h,
         width: 171.w,
@@ -99,30 +165,41 @@ class ChooseAPetToAdoptWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(12.r)),
                 color: const Color.fromRGBO(241, 152, 69, 1),
+                image: DecorationImage(
+                    image: Image.asset(petImageUrl).image, fit: BoxFit.cover),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 16.h, top: 8.h),
+              padding: EdgeInsets.only(left: 8.h, top: 8.h, right: 8.h),
               child: Column(
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
                     child: Row(
                       children: [
-                        Text(
-                          'Paçoca',
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w500,
-                            color: const Color.fromRGBO(86, 83, 83, 1),
+                        Flexible(
+                          child: Text(
+                            petName,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromRGBO(86, 83, 83, 1),
+                            ),
                           ),
                         ),
-                        Text(
-                          ' (Macho)',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w500,
-                            color: const Color.fromRGBO(86, 77, 77, 1),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 6),
+                          child: Flexible(
+                            child: Text(
+                              '($petSex)',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w500,
+                                color: const Color.fromRGBO(86, 77, 77, 1),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -136,7 +213,7 @@ class ChooseAPetToAdoptWidget extends StatelessWidget {
                         size: 16.sp,
                       ),
                       Text(
-                        'Salvador, ba',
+                        petLocalization,
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,

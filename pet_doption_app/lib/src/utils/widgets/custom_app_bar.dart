@@ -7,6 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final Color? appBarTitleColor;
   final Color? appBarIconColor;
+  final Function()? onBackButtonPressed;
   const CustomAppBar({
     super.key,
     required this.appBarTitle,
@@ -14,6 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.appBarTitleColor,
     this.appBarIconColor,
+    this.onBackButtonPressed,
   });
 
   @override
@@ -24,9 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: Padding(
         padding: EdgeInsets.only(left: 16.w),
         child: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
+          onTap: onBackButtonPressed,
           child: Padding(
             padding: EdgeInsets.only(top: 16.h),
             child: Icon(

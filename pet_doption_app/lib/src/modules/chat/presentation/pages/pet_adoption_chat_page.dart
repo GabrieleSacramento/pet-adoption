@@ -15,97 +15,100 @@ class _PetAdoptionChatPageState extends State<PetAdoptionChatPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          backgroundColor: const Color.fromRGBO(241, 152, 69, 1),
-          appBar: const CustomAppBar(
-            appBarTitle: 'Luciana',
-            isBackButtonVisible: true,
-          ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverFillRemaining(
-                        hasScrollBody: true,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                child: Column(
-                                  children: [
-                                    Flexible(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 16.h, horizontal: 16.w),
-                                        margin: EdgeInsets.only(
-                                            top: 16.h,
-                                            left: 16.w,
-                                            right: 62.w,
-                                            bottom: 16.h),
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromRGBO(
-                                              245, 245, 245, 1),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.r),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          'Olá, tenho interesse em adotar o paçoca',
-                                          style: TextStyle(
-                                            fontSize: 16.h,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+            backgroundColor: const Color.fromRGBO(241, 152, 69, 1),
+            appBar: const CustomAppBar(
+              appBarTitle: 'Luciana',
+              isBackButtonVisible: true,
+            ),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverFillRemaining(
+                          hasScrollBody: true,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 16.h, horizontal: 16.w),
+                                          margin: EdgeInsets.only(
+                                              top: 16.h,
+                                              left: 16.w,
+                                              right: 62.w,
+                                              bottom: 16.h),
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
                                             color: const Color.fromRGBO(
-                                                82, 82, 82, 1),
+                                                245, 245, 245, 1),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.r),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Olá, tenho interesse em adotar o paçoca',
+                                            style: TextStyle(
+                                              fontSize: 16.h,
+                                              color: const Color.fromRGBO(
+                                                  82, 82, 82, 1),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Flexible(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 16.h, horizontal: 16.w),
-                                        margin: EdgeInsets.only(
-                                            top: 16.h,
-                                            left: 62.w,
-                                            right: 16.w,
-                                            bottom: 16.h),
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromRGBO(
-                                              254, 184, 119, 1),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.r),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          'Oii tudo bom, me fala um pouco mais sobre você?',
-                                          style: TextStyle(
-                                            fontSize: 16.h,
+                                      Flexible(
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 16.h, horizontal: 16.w),
+                                          margin: EdgeInsets.only(
+                                              top: 16.h,
+                                              left: 62.w,
+                                              right: 16.w,
+                                              bottom: 16.h),
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
                                             color: const Color.fromRGBO(
-                                                82, 82, 82, 1),
+                                                254, 184, 119, 1),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.r),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Oii tudo bom, me fala um pouco mais sobre você?',
+                                            style: TextStyle(
+                                              fontSize: 16.h,
+                                              color: const Color.fromRGBO(
+                                                  82, 82, 82, 1),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            _InputChatWidget(chatController: chatController),
-                          ],
-                        ),
-                      )
-                    ],
+                              _InputChatWidget(chatController: chatController),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          )),
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

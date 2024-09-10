@@ -1,21 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pet_doption_app/src/modules/chat/presentation/pages/pet_adoption_chat_page.dart';
+import 'package:pet_doption_app/src/modules/home/presentation/pages/pet_adoption_home_page.dart';
 import 'package:pet_doption_app/src/utils/widgets/custom_button.dart';
 
 import '../../../../utils/widgets/custom_app_bar.dart';
 
 class PetDescriptionPage extends StatelessWidget {
-  const PetDescriptionPage({super.key});
+  final String petName;
+  final String petRace;
+  final String petAge;
+  final String petDescription;
+  final String petImageUrl;
+  final String petSex;
+  final String petWeight;
+  final String petLocalization;
+  const PetDescriptionPage({
+    super.key,
+    required this.petRace,
+    required this.petWeight,
+    required this.petAge,
+    required this.petDescription,
+    required this.petImageUrl,
+    required this.petSex,
+    required this.petName,
+    required this.petLocalization,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: const CustomAppBar(
+        appBar: CustomAppBar(
           appBarTitle: 'Sobre o pet',
           isBackButtonVisible: true,
+          onBackButtonPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const PetAdoptionHomePage())),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -25,9 +48,8 @@ class PetDescriptionPage extends StatelessWidget {
                 height: 250.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  // image: DecorationImage(
-                  //     image: Image.asset('assets/images/picture.jpg').image,
-                  //     fit: BoxFit.cover),
+                  image: DecorationImage(
+                      image: Image.asset(petImageUrl).image, fit: BoxFit.cover),
                   borderRadius: BorderRadius.all(
                     Radius.circular(20.r),
                   ),
@@ -41,7 +63,7 @@ class PetDescriptionPage extends StatelessWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Paçoca',
+                        petName,
                         style: TextStyle(
                           fontSize: 32.h,
                           color: const Color.fromRGBO(241, 152, 69, 1),
@@ -61,7 +83,7 @@ class PetDescriptionPage extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(left: 8.w),
                             child: Text(
-                              'Salvador, ba',
+                              petLocalization,
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w500,
@@ -74,39 +96,21 @@ class PetDescriptionPage extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Container(
-                          height: 76.h,
-                          width: 76.w,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(255, 255, 255, 1),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12.r)),
-                            border: Border.all(
-                              color: const Color.fromRGBO(241, 152, 69, 1),
-                              width: 2.w,
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Sexo',
-                                style: TextStyle(
-                                  fontSize: 10.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color.fromRGBO(166, 160, 160, 1),
-                                ),
-                              ),
-                              Text(
-                                'Macho',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color.fromRGBO(86, 83, 83, 1),
-                                ),
-                              ),
-                            ],
-                          ),
+                        PetInfoCardWidget(
+                          title: 'Raça',
+                          subtitle: petRace,
+                        ),
+                        PetInfoCardWidget(
+                          title: 'Idade',
+                          subtitle: petAge,
+                        ),
+                        PetInfoCardWidget(
+                          title: 'Peso',
+                          subtitle: petWeight,
+                        ),
+                        PetInfoCardWidget(
+                          title: 'Sexo',
+                          subtitle: petSex,
                         ),
                       ],
                     ),
@@ -126,7 +130,7 @@ class PetDescriptionPage extends StatelessWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Paçoca é um famoso vira lata caramelo, muito fofo e brincalhão.Ele tem 6 meses e já foi castrado, agora está em busca de um novo lar. Que tal tê-lo como seu novo amigo? ',
+                        petDescription,
                         style: TextStyle(
                           fontSize: 14.h,
                           color: const Color.fromRGBO(86, 83, 83, 1),
@@ -156,6 +160,57 @@ class PetDescriptionPage extends StatelessWidget {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class PetInfoCardWidget extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  const PetInfoCardWidget({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 6.w),
+      child: Container(
+        height: 76.h,
+        width: 76.w,
+        decoration: BoxDecoration(
+          color: const Color.fromRGBO(255, 255, 255, 1),
+          borderRadius: BorderRadius.all(Radius.circular(12.r)),
+          border: Border.all(
+            color: const Color.fromRGBO(241, 152, 69, 1),
+            width: 2.w,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w500,
+                color: const Color.fromRGBO(166, 160, 160, 1),
+              ),
+            ),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w500,
+                color: const Color.fromRGBO(86, 83, 83, 1),
+              ),
+            ),
+          ],
         ),
       ),
     );
