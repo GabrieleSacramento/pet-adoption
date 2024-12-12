@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_doption_app/src/modules/register_pet/domain/entities/pet_info_entity.dart';
 import 'package:pet_doption_app/src/modules/register_pet/domain/use_cases/add_pet_information_use_case.dart';
 

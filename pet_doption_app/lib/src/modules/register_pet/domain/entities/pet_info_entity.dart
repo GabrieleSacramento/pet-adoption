@@ -28,4 +28,17 @@ class PetInfoEntity {
       _$PetInfoEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$PetInfoEntityToJson(this);
+
+  factory PetInfoEntity.fromMap(Map<String, dynamic> data) {
+    return PetInfoEntity(
+      name: data['name'],
+      race: data['race'],
+      age: data['age'],
+      description: data['description'],
+      imageUrl: data['imageUrl'],
+      sex: data['sex'],
+      weight: data['weight'],
+      localization: data['localization'],
+    );
+  }
 }

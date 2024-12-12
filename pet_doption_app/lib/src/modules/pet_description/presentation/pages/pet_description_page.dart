@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pet_doption_app/src/modules/chat/presentation/pages/pet_adoption_chat_page.dart';
@@ -49,11 +51,15 @@ class PetDescriptionPage extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: Image.asset(petImageUrl).image, fit: BoxFit.cover),
+                      image: Image.file(File(petImageUrl)).image,
+                      fit: BoxFit.cover),
                   borderRadius: BorderRadius.all(
                     Radius.circular(20.r),
                   ),
-                  color: Colors.grey,
+                ),
+                child: Image.network(
+                  petImageUrl,
+                  fit: BoxFit.contain,
                 ),
               ),
               Padding(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
@@ -56,9 +55,10 @@ class _SignupPageState extends State<SignupPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: const CustomAppBar(
+        appBar: CustomAppBar(
           appBarTitle: 'Criar conta',
           isBackButtonVisible: true,
+          onBackButtonPressed: () => Navigator.pop(context),
         ),
         body: BlocProvider(
             create: (context) => signupCubit,

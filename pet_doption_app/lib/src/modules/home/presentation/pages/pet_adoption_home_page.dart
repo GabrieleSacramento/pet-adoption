@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
@@ -17,15 +15,14 @@ class PetAdoptionHomePage extends StatefulWidget {
 }
 
 final GetPetInfoCubit _getPetInfoCubit = GetIt.I.get<GetPetInfoCubit>();
-
-final ScrollController scrollController = ScrollController();
+final ScrollController _scrollController = ScrollController();
 
 class _PetAdoptionHomePageState extends State<PetAdoptionHomePage> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _getPetInfoCubit..fetchPetInformation(),
-      child: SafeArea(
+    return SafeArea(
+      child: BlocProvider(
+        create: (context) => _getPetInfoCubit..getPets(),
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: const HomePageAppBar(),
@@ -50,17 +47,18 @@ class _PetAdoptionHomePageState extends State<PetAdoptionHomePage> {
                   ),
                   BlocBuilder<GetPetInfoCubit, GetPetInfoState>(
                     builder: (context, state) {
-                      if (state is GetPetInfoLoading) {
+                      if (state is GetPetInfoLoading &&
+                          state.petInfoEntity.isEmpty) {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
                       if (state is GetPetInfoSuccess) {
+                        final petInfoEntity = state.petInfoEntity;
                         return Padding(
                           padding: EdgeInsets.only(bottom: 32.h),
                           child: GridView.builder(
-                            controller: scrollController,
-                            itemCount: state.petInfoEntity.length,
+                            itemCount: petInfoEntity.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             gridDelegate:
@@ -70,7 +68,13 @@ class _PetAdoptionHomePageState extends State<PetAdoptionHomePage> {
                               mainAxisSpacing: 16.w,
                               crossAxisSpacing: 16.h,
                             ),
+                            controller: _scrollController,
                             itemBuilder: (context, index) {
+                              if (index >= petInfoEntity.length) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
                               return ChooseAPetToAdoptWidget(
                                 petName: state.petInfoEntity[index].name,
                                 petSex: state.petInfoEntity[index].sex,
@@ -165,8 +169,10 @@ class ChooseAPetToAdoptWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(12.r)),
                 color: const Color.fromRGBO(241, 152, 69, 1),
-                image: DecorationImage(
-                    image: Image.asset(petImageUrl).image, fit: BoxFit.cover),
+              ),
+              child: Image.network(
+                petImageUrl,
+                fit: BoxFit.contain,
               ),
             ),
             Padding(
@@ -212,14 +218,19 @@ class ChooseAPetToAdoptWidget extends StatelessWidget {
                         color: const Color.fromRGBO(241, 152, 69, 1),
                         size: 16.sp,
                       ),
-                      Text(
-                        petLocalization,
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                          color: const Color.fromRGBO(86, 77, 77, 1),
-                        ),
-                      ),
+                      Builder(builder: (context) {
+                        return Flexible(
+                          child: Text(
+                            petLocalization,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromRGBO(86, 77, 77, 1),
+                            ),
+                          ),
+                        );
+                      }),
                     ],
                   ),
                 ],
@@ -321,7 +332,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             const CircleAvatar(
-              backgroundImage: AssetImage('assets/images/mari.JPG'),
+              // backgroundImage: AssetImage(''),
               backgroundColor: Colors.white,
             ),
           ],

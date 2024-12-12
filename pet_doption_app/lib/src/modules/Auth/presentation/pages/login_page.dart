@@ -48,12 +48,13 @@ class _LoginPageState extends State<LoginPage> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
             backgroundColor: Colors.white,
-            appBar: const CustomAppBar(
+            appBar: CustomAppBar(
               appBarTitle: 'Login',
               isBackButtonVisible: true,
               backgroundColor: Colors.white,
-              appBarTitleColor: Color.fromRGBO(241, 152, 69, 1),
-              appBarIconColor: Color.fromRGBO(241, 152, 69, 1),
+              appBarTitleColor: const Color.fromRGBO(241, 152, 69, 1),
+              appBarIconColor: const Color.fromRGBO(241, 152, 69, 1),
+              onBackButtonPressed: () => Navigator.pop(context),
             ),
             body: CustomScrollView(
               slivers: [
