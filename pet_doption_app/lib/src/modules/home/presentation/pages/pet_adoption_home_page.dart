@@ -26,9 +26,9 @@ class _PetAdoptionHomePageState extends State<PetAdoptionHomePage> {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: const HomePageAppBar(),
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-            child: SingleChildScrollView(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
               child: Column(
                 children: [
                   const RegisterThePetToDonateWidget(),

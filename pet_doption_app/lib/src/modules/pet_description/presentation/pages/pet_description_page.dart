@@ -50,9 +50,6 @@ class PetDescriptionPage extends StatelessWidget {
                 height: 250.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: Image.file(File(petImageUrl)).image,
-                      fit: BoxFit.cover),
                   borderRadius: BorderRadius.all(
                     Radius.circular(20.r),
                   ),

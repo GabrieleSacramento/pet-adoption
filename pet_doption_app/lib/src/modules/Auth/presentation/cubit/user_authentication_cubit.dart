@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_doption_app/src/modules/Auth/domain/entities/user_authentication_entity.dart';
 import 'package:pet_doption_app/src/modules/Auth/domain/use_cases/user_authentication_use_case.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'user_authentication_state.dart';
 
@@ -16,13 +17,35 @@ class UserAuthenticationCubit extends Cubit<UserAuthenticationState> {
 
     try {
       final result =
-          await userAuthenticationUseCase.signup(userAuthenticationEntity);
+          await userAuthenticationUseCase.login(userAuthenticationEntity);
+      final sp = await SharedPreferences.getInstance();
+
       result.fold(
         (l) => emit(UserAuthenticationError(message: l.message!)),
-        (r) => emit(UserAuthenticationSuccess(user: r)),
+        (r) async {
+          String? token = await r.getIdToken();
+          await sp.setString('token', '$token');
+          emit(UserAuthenticationSuccess(user: r));
+        },
       );
     } on FirebaseAuthException catch (e) {
       emit(UserAuthenticationError(message: e.message!));
+    }
+  }
+
+  void checkAuthentication() async {
+    final sp = await SharedPreferences.getInstance();
+    String? token = sp.getString('token');
+
+    if (token != null) {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        emit(UserAuthenticationSuccess(user: user));
+      } else {
+        emit(UserAuthenticationInitial());
+      }
+    } else {
+      emit(UserAuthenticationInitial());
     }
   }
 
@@ -32,9 +55,15 @@ class UserAuthenticationCubit extends Cubit<UserAuthenticationState> {
     try {
       final result =
           await userAuthenticationUseCase.login(userAuthenticationEntity);
+      final sp = await SharedPreferences.getInstance();
+
       result.fold(
         (l) => emit(UserAuthenticationError(message: l.message!)),
-        (r) => emit(UserAuthenticationSuccess(user: r)),
+        (r) async {
+          String? token = await r.getIdToken();
+          await sp.setString('token', '$token');
+          emit(UserAuthenticationSuccess(user: r));
+        },
       );
     } on FirebaseAuthException catch (e) {
       emit(UserAuthenticationError(message: e.message!));

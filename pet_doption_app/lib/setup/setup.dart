@@ -101,8 +101,8 @@ void setupCubits() {
   );
   setup.registerFactory<UploadImageCubit>(
     () => UploadImageCubit(
-        getImageUseCase: GetIt.I.get<GetImageUseCaseImpl>(),
-        uploadImageUseCase: GetIt.I.get<UploadImageUseCaseImpl>()),
+        getImageUseCase: GetIt.I.get<GetImageUseCase>(),
+        uploadImageUseCase: GetIt.I.get<UploadImageUseCase>()),
   );
 
   setup.registerFactory<ImagePicker>(() => ImagePicker());

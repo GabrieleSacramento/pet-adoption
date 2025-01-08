@@ -22,19 +22,4 @@ class GetPetInfoCubit extends Cubit<GetPetInfoState> {
           message: "Não foi possível carregar as informações dos pets."));
     }
   }
-
-  // void getMorePets() async {
-  //   if (state is GetPetInfoSuccess) {
-  //     try {
-  //       final morePets = await getPetInformationUseCase.getMorePets();
-  //       final currentState = state as GetPetInfoSuccess;
-  //       final allPets = List<PetInfoEntity>.from(currentState.petInfoEntity)
-  //         ..addAll(morePets);
-  //       emit(GetPetInfoSuccess(petInfoEntity: allPets));
-  //     } catch (e) {
-  //       emit(const GetPetInfoError(
-  //           message: "Não foi possível carregar mais informações dos pets."));
-  //     }
-  //   }
-  // }
 }
