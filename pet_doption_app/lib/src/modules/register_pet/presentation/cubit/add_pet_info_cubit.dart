@@ -14,7 +14,9 @@ class AddPetInfoCubit extends Cubit<AddPetInfoState> {
     try {
       emit(AddPetInfoLoading());
       await addPetInformationUseCase.addPetInformation(petInfoEntity);
-      emit(AddPetInfoSuccess());
+      emit(AddPetInfoSuccess(
+        imagePath: petInfoEntity.imageUrl,
+      ));
     } catch (e) {
       emit(AddPetInfoError(message: e.toString()));
     }

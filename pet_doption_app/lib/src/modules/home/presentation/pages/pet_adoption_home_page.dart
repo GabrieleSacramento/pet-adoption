@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,7 +24,7 @@ class _PetAdoptionHomePageState extends State<PetAdoptionHomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocProvider(
-        create: (context) => _getPetInfoCubit..getPets(),
+        create: (context) => _getPetInfoCubit..loadPets(),
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: const HomePageAppBar(),
@@ -170,8 +172,8 @@ class ChooseAPetToAdoptWidget extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(12.r)),
                 color: const Color.fromRGBO(241, 152, 69, 1),
               ),
-              child: Image.network(
-                petImageUrl,
+              child: Image.file(
+                File(petImageUrl),
                 fit: BoxFit.contain,
               ),
             ),

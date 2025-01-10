@@ -13,13 +13,6 @@ final class GetPetInfoInitial extends GetPetInfoState {}
 
 final class GetPetInfoLoading extends GetPetInfoState {}
 
-final class GetPetInfoLoadingMore extends GetPetInfoState {
-  @override
-  final List<PetInfoEntity> petInfoEntity;
-
-  const GetPetInfoLoadingMore(this.petInfoEntity);
-}
-
 final class GetPetInfoSuccess extends GetPetInfoState {
   @override
   final List<PetInfoEntity> petInfoEntity;
@@ -32,3 +25,11 @@ final class GetPetInfoError extends GetPetInfoState {
 
   const GetPetInfoError({required this.message});
 }
+
+final class ImageUploaded extends GetPetInfoState {
+  final String imageUrl;
+
+  const ImageUploaded({required this.imageUrl});
+}
+
+final class UploadImageLoading extends GetPetInfoState {}

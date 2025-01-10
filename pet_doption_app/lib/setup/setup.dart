@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,17 +11,15 @@ import 'package:pet_doption_app/src/modules/Auth/infra/repositories/user_authent
 import 'package:pet_doption_app/src/modules/Auth/infra/use_cases/user_authentication_use_case_impl.dart';
 import 'package:pet_doption_app/src/modules/Auth/presentation/cubit/user_authentication_cubit.dart';
 import 'package:pet_doption_app/src/modules/register_pet/domain/entities/pet_info_entity.dart';
-import 'package:pet_doption_app/src/modules/register_pet/domain/repositories/upload_image_repository.dart';
+import 'package:pet_doption_app/src/modules/register_pet/domain/repositories/upload_pet_info_repository.dart';
 import 'package:pet_doption_app/src/modules/register_pet/domain/use_cases/add_pet_information_use_case.dart';
-import 'package:pet_doption_app/src/modules/register_pet/domain/use_cases/get_image_use_case.dart';
-import 'package:pet_doption_app/src/modules/register_pet/domain/use_cases/get_pet_information_use_case.dart';
-import 'package:pet_doption_app/src/modules/register_pet/domain/use_cases/upload_image_use_case.dart';
-import 'package:pet_doption_app/src/modules/register_pet/infra/repositories/upload_image_repository_impl.dart';
-import 'package:pet_doption_app/src/modules/register_pet/infra/use_cases/get_image_use_case_impl.dart';
-import 'package:pet_doption_app/src/modules/register_pet/infra/use_cases/upload_image_use_case_impl.dart';
+import 'package:pet_doption_app/src/modules/register_pet/domain/use_cases/upload_pet_info_use_case.dart';
+import 'package:pet_doption_app/src/modules/register_pet/external/datasources/upload_pet_info_datasource_impl.dart';
+import 'package:pet_doption_app/src/modules/register_pet/infra/datasources/upload_pet_info_datasource.dart';
+import 'package:pet_doption_app/src/modules/register_pet/infra/repositories/upload_pet_info_repository_impl.dart';
+import 'package:pet_doption_app/src/modules/register_pet/infra/use_cases/upload_pet_info_use_case_impl.dart';
 import 'package:pet_doption_app/src/modules/register_pet/presentation/cubit/add_pet_info_cubit.dart';
 import 'package:pet_doption_app/src/modules/register_pet/presentation/cubit/get_pet_info_cubit.dart';
-import 'package:pet_doption_app/src/modules/register_pet/presentation/cubit/upload_image_cubit.dart';
 
 Dio dio = Dio();
 
@@ -36,7 +35,14 @@ Future<void> registerDependencies() async {
 
 void setupDatasources() {
   setup.registerFactory<UserAuthenticationDatasource>(
-      () => UserAuthenticationDatasourceImpl());
+    () => UserAuthenticationDatasourceImpl(),
+  );
+  setup.registerFactory<UploadPetInfoDatasource>(
+    () => UploadPetInfoDatasourceImpl(
+      storage: GetIt.I.get<FirebaseStorage>(),
+      databaseReference: GetIt.I.get<DatabaseReference>(),
+    ),
+  );
 }
 
 void setupRepositories() {
@@ -45,10 +51,9 @@ void setupRepositories() {
       datasource: GetIt.I.get<UserAuthenticationDatasource>(),
     ),
   );
-  setup.registerFactory<ImageRepository>(
-    () => ImageRepositoryImpl(
-      imagePicker: GetIt.I.get<ImagePicker>(),
-      storage: GetIt.I.get<FirebaseStorage>(),
+  setup.registerFactory<UploadPetInfoRepository>(
+    () => UploadPetInfoRepositoryImpl(
+      datasource: GetIt.I.get<UploadPetInfoDatasource>(),
     ),
   );
 }
@@ -60,25 +65,16 @@ void setupUseCases() {
     ),
   );
 
-  setup.registerFactory<GetImageUseCase>(
-    () => GetImageUseCaseImpl(
-      repository: GetIt.I.get<ImageRepository>(),
-    ),
-  );
-  setup.registerFactory<UploadImageUseCase>(
-    () => UploadImageUseCaseImpl(
-      repository: GetIt.I.get<ImageRepository>(),
-    ),
-  );
-
   setup.registerFactory<AddPetInformationUseCase>(
     () => AddPetInformationUseCase(
       petInfoEntity: GetIt.I.get<PetInfoEntity>(),
     ),
   );
 
-  setup.registerFactory<GetPetInformationUseCase>(
-    () => GetPetInformationUseCase(),
+  setup.registerFactory<UploadPetInfoUseCase>(
+    () => UploadPetInfoUseCaseImpl(
+      repository: GetIt.I.get<UploadPetInfoRepository>(),
+    ),
   );
 }
 
@@ -96,18 +92,16 @@ void setupCubits() {
   );
   setup.registerFactory<GetPetInfoCubit>(
     () => GetPetInfoCubit(
-      getPetInformationUseCase: GetIt.I.get<GetPetInformationUseCase>(),
+      uploadPetInfoUseCase: GetIt.I.get<UploadPetInfoUseCase>(),
     ),
-  );
-  setup.registerFactory<UploadImageCubit>(
-    () => UploadImageCubit(
-        getImageUseCase: GetIt.I.get<GetImageUseCase>(),
-        uploadImageUseCase: GetIt.I.get<UploadImageUseCase>()),
   );
 
   setup.registerFactory<ImagePicker>(() => ImagePicker());
   setup.registerFactory<FirebaseStorage>(
     () => FirebaseStorage.instance,
+  );
+  setup.registerFactory<DatabaseReference>(
+    () => FirebaseDatabase.instance.ref(),
   );
 }
 

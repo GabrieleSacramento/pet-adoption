@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pet_doption_app/setup/setup.dart';
 import 'package:pet_doption_app/src/modules/register_pet/domain/entities/pet_info_entity.dart';
 import 'package:pet_doption_app/src/modules/register_pet/presentation/cubit/add_pet_info_cubit.dart';
-import 'package:pet_doption_app/src/modules/register_pet/presentation/cubit/upload_image_cubit.dart';
+import 'package:pet_doption_app/src/modules/register_pet/presentation/cubit/get_pet_info_cubit.dart';
 import 'package:pet_doption_app/src/utils/widgets/custom_button.dart';
 import 'package:pet_doption_app/src/utils/widgets/custom_form.dart';
 import 'package:pet_doption_app/src/utils/widgets/loading_button.dart';
@@ -30,7 +29,7 @@ class _PetFormState extends State<PetForm> {
   final petDescriptionController = TextEditingController();
   final petLocalizationController = TextEditingController();
   final AddPetInfoCubit _addPetInfoCubit = GetIt.I.get<AddPetInfoCubit>();
-  final _uploadImageCubit = setup.get<UploadImageCubit>();
+  final GetPetInfoCubit _getPetInfoCubit = GetIt.I.get<GetPetInfoCubit>();
 
   String? validateField(String? text) {
     if (text == null || text.isEmpty) {
@@ -72,7 +71,7 @@ class _PetFormState extends State<PetForm> {
             create: (context) => _addPetInfoCubit,
           ),
           BlocProvider(
-            create: (context) => _uploadImageCubit,
+            create: (context) => _getPetInfoCubit,
           ),
         ],
         child: GestureDetector(
@@ -84,8 +83,8 @@ class _PetFormState extends State<PetForm> {
               isBackButtonVisible: true,
               onBackButtonPressed: () => Navigator.pop(context),
             ),
-            body: BlocBuilder<UploadImageCubit, UploadImageState>(
-              builder: (context, imageUploadState) {
+            body: BlocBuilder<GetPetInfoCubit, GetPetInfoState>(
+              builder: (context, getPetInfoState) {
                 return Padding(
                   padding: EdgeInsets.only(left: 16.w, right: 32.w, top: 24.h),
                   child: SingleChildScrollView(
@@ -163,26 +162,30 @@ class _PetFormState extends State<PetForm> {
                               validator: validateField,
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 16.h),
-                            child: Container(
-                              width: double.maxFinite,
-                              height: 48.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(
-                                  color: const Color.fromRGBO(37, 41, 84, 0.15),
-                                  width: 1.w,
+                          GestureDetector(
+                            onTap: () {
+                              _getPetInfoCubit
+                                  .selectImage(petNameController.text);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 16.h),
+                              child: Container(
+                                width: double.maxFinite,
+                                height: 48.h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(
+                                    color:
+                                        const Color.fromRGBO(37, 41, 84, 0.15),
+                                    width: 1.w,
+                                  ),
                                 ),
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _uploadImageCubit.pickAndUploadImage();
-                                },
-                                child: imageUploadState is ImageUploaded
+                                child: getPetInfoState is ImageUploaded
                                     ? Center(
                                         child: Text(
-                                          imageUploadState.imageUrl,
+                                          getPetInfoState.imageUrl.replaceAll(
+                                              getPetInfoState.imageUrl,
+                                              'Imagem selecionada'),
                                           style: TextStyle(
                                             color: const Color.fromRGBO(
                                                 241, 152, 69, 1),
@@ -190,10 +193,18 @@ class _PetFormState extends State<PetForm> {
                                           ),
                                         ),
                                       )
-                                    : const Icon(
-                                        Icons.file_download_outlined,
-                                        color: Color.fromRGBO(241, 152, 69, 1),
-                                      ),
+                                    : getPetInfoState is UploadImageLoading
+                                        ? const Center(
+                                            child: CircularProgressIndicator(
+                                              color: Color.fromRGBO(
+                                                  241, 152, 69, 1),
+                                            ),
+                                          )
+                                        : const Icon(
+                                            Icons.file_download_outlined,
+                                            color:
+                                                Color.fromRGBO(241, 152, 69, 1),
+                                          ),
                               ),
                             ),
                           ),
@@ -211,10 +222,7 @@ class _PetFormState extends State<PetForm> {
                                     MaterialPageRoute(
                                       builder: (context) {
                                         return PetDescriptionPage(
-                                          petImageUrl:
-                                              imageUploadState is ImageUploaded
-                                                  ? imageUploadState.imageUrl
-                                                  : '',
+                                          petImageUrl: state.imagePath,
                                           petSex: petSexController.text,
                                           petName: petNameController.text,
                                           petLocalization:
@@ -234,8 +242,8 @@ class _PetFormState extends State<PetForm> {
                                       'Não foi possivel cadastrar o pet, verifique os campos e tente novamente');
                                 }
                               },
-                              builder: (context, state) {
-                                if (state is AddPetInfoLoading) {
+                              builder: (context, addPetInfoState) {
+                                if (getPetInfoState is AddPetInfoLoading) {
                                   return const LoadingButton(
                                     isLarge: true,
                                   );
@@ -244,7 +252,7 @@ class _PetFormState extends State<PetForm> {
                                   textButton: 'Cadastrar pet',
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
-                                      if (imageUploadState is ImageUploaded) {
+                                      if (getPetInfoState is ImageUploaded) {
                                         _addPetInfoCubit.addPetInformation(
                                           PetInfoEntity(
                                             name: petNameController.text,
@@ -252,7 +260,7 @@ class _PetFormState extends State<PetForm> {
                                             age: petAgeController.text,
                                             description:
                                                 petDescriptionController.text,
-                                            imageUrl: imageUploadState.imageUrl,
+                                            imageUrl: getPetInfoState.imageUrl,
                                             sex: petSexController.text,
                                             weight: petWeigthController.text,
                                             localization:
